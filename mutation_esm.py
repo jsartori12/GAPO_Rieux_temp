@@ -15,6 +15,7 @@ import argparse
 # Load ESM-2 model
 model, alphabet = esm.pretrained.esm2_t33_650M_UR50D()
 batch_converter = alphabet.get_batch_converter()
+model.eval()
 
 def insert_mask(sequence, position, mask="<mask>"):
     """
