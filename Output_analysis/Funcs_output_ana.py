@@ -727,7 +727,44 @@ def plot_panel(df):
     plt.tight_layout()
     plt.show()
 
-def plot_panel_3d(df, out,dG_min=None, dG_max=None):
+def plot_panel_3d(df, out,df_lowests,dG_min=None, dG_max=None):
+    
+    ##### do the same for the lowests
+    # Set the style and figure
+    sns.set(style="whitegrid")
+    fig = plt.figure(figsize=(14, 6))
+    
+    # First plot: Colored by Population (3D)
+    ax1 = fig.add_subplot(121, projection='3d')
+    scatter1 = ax1.scatter(df_lowests.iloc[:, 0], df_lowests.iloc[:, 1], df_lowests['dG'], c=df_lowests['Population'], cmap='viridis', s=50, edgecolor='k')
+    ax1.set_title('3D Scatter Plot Colored by Population')
+    ax1.set_xlabel('X Dimension')
+    ax1.set_ylabel('Y Dimension')
+    ax1.set_zlabel('')
+    if dG_min is not None and dG_max is not None:
+        ax1.set_zlim(dG_min, dG_max)
+    fig.colorbar(scatter1, ax=ax1, label='Population')
+
+    # Second plot: Colored by dG (3D)
+    ax2 = fig.add_subplot(122, projection='3d')
+    scatter2 = ax2.scatter(df_lowests.iloc[:, 0], df_lowests.iloc[:, 1], df_lowests['dG'], c=df_lowests['dG'], cmap='coolwarm', s=50, edgecolor='k')
+    ax2.set_title('3D Scatter Plot Colored by dG')
+    #ax2.set_xlabel('X Dimension')
+    #ax2.set_ylabel('Y Dimension')
+    ax2.set_zlabel('')
+    # Optionally set dG limits
+    if dG_min is not None and dG_max is not None:
+        ax2.set_zlim(dG_min, dG_max)
+    fig.colorbar(scatter2, ax=ax2, label='')
+    
+    # Adjust the layout
+    plt.tight_layout()
+    plt.show()
+    # Save the plot
+    fig.savefig(f"{out}_lowests_panel.png", dpi=600, bbox_inches='tight')
+    fig.savefig(f"{out}_lowests_panel_transp.png", dpi=600, transparent=True, bbox_inches='tight')
+
+    #######
     # Set the style and figure
     sns.set(style="whitegrid")
     fig = plt.figure(figsize=(14, 6))
@@ -761,46 +798,10 @@ def plot_panel_3d(df, out,dG_min=None, dG_max=None):
     # Save the plot
     fig.savefig(f"{out}_panel.png", dpi=600, bbox_inches='tight')
     fig.savefig(f"{out}_panel_transp.png", dpi=600, transparent=True, bbox_inches='tight')
-# def plot_panel_3d(df, dG_min=None, dG_max=None):
-#     # Set the style and figure
-#     sns.set(style="whitegrid")
-#     fig = plt.figure(figsize=(14, 6))
-    
-#     # First plot: Colored by Population (3D)
-#     ax1 = fig.add_subplot(121, projection='3d')
-#     scatter1 = ax1.scatter(df.iloc[:, 0], df.iloc[:, 1], df['dG'], c=df['Population'], cmap='viridis', s=50, edgecolor='k')
-#     ax1.set_title('3D Scatter Plot Colored by Population')
 
-#     # Remove axis labels
-#     ax1.set_xticks([])
-#     ax1.set_yticks([])
-#     ax1.set_zticks([])
 
-#     # Optionally set dG limits
-#     if dG_min is not None and dG_max is not None:
-#         ax1.set_zlim(dG_min, dG_max)
-    
-#     fig.colorbar(scatter1, ax=ax1, label='Population')
 
-#     # Second plot: Colored by dG (3D)
-#     ax2 = fig.add_subplot(122, projection='3d')
-#     scatter2 = ax2.scatter(df.iloc[:, 0], df.iloc[:, 1], df['dG'], c=df['dG'], cmap='coolwarm', s=50, edgecolor='k')
-#     ax2.set_title('3D Scatter Plot Colored by dG')
 
-#     # Remove axis labels
-#     ax2.set_xticks([])
-#     ax2.set_yticks([])
-#     ax2.set_zticks([])
-
-#     # Optionally set dG limits
-#     if dG_min is not None and dG_max is not None:
-#         ax2.set_zlim(dG_min, dG_max)
-
-#     fig.colorbar(scatter2, ax=ax2, label='dG')
-    
-#     # Adjust the layout
-#     plt.tight_layout()
-#     plt.show()
 
 def Ploting_tSNE_panel(df, out, column_name, plot_lowest_dG=False):
     unique_values = df[column_name].unique()

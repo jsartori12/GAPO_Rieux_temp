@@ -31,7 +31,7 @@ unique_apt_rosetta_esm= apt_rosetta_esm.drop_duplicates(subset=['Sequence'])
 apt_rosetta_random= Funcs_output_ana.Read_data(f"{path_outputs}/apt_rosetta_random.txt", 2)
 unique_apt_rosetta_random= apt_rosetta_random.drop_duplicates(subset=['Sequence'])
 
-min_dG_row = unique_apt_rosetta_random.loc[unique_apt_rosetta_random['dG'].idxmin()]
+min_dG_row = unique_apt_rosetta_esm.loc[unique_apt_rosetta_esm['dG'].idxmin()]
 
 # Get the sequence associated with the lowest dG value
 # sequence_with_lowest_dG = min_dG_row
@@ -159,29 +159,16 @@ def treat_tsne_data(tsne_csv, df, out,dG_min=0.80, dG_max=0.92):
 
     # Assign the corresponding dG values from df_trimmed to the tsne dataframe
     tsne["dG"] = df_trimmed["dG"].tolist()
-    
+    # Group by 'Population' and get the row with the minimum dG value for each group
+    df_lowests = tsne.loc[tsne.groupby('Population')['dG'].idxmin()]
+
     # Call the plot_panel_3d function to generate the plot
-    print(tsne)
-    Funcs_output_ana.plot_panel_3d(tsne, dG_min=dG_min, dG_max=dG_max, out = out) 
+    Funcs_output_ana.plot_panel_3d(tsne, dG_min=dG_min, dG_max=dG_max, out = out, df_lowests = df_lowests) 
 
 treat_tsne_data("esm_esm_tsne.csv", unique_apt_esm_esm, dG_min= 0.70, dG_max= 0.95,out = "esm_esm")
 treat_tsne_data("esm_random_tsne.csv", unique_apt_esm_random, dG_min= 0.70, dG_max= 0.95,out = "esm_random")
 treat_tsne_data("rosetta_esm_tsne.csv", unique_apt_rosetta_esm, dG_min= -450, dG_max=-200, out = "rosetta_esm")
 treat_tsne_data("rosetta_random_tsne.csv", unique_apt_rosetta_random, dG_min= -450, dG_max=-200, out = "rosetta_random")
-
-
-#unique_apt_rosetta_esm["dG"].max()
-
-
-
-
-
-
-
-
-
-
-
 
 
 
